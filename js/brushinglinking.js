@@ -253,8 +253,10 @@ d3.csv("data/iris.csv").then((data) => {
   // Call to removes existing brushes 
   function clear() {
       svg1.call(brush1.move, null);
+      svg1.call(brush2.move, null);
       
-      //TODO: add code to clear existing brush from svg2
+
+      //TODO: add code to clear existing brush from svg2: DONE
   }
 
   // Call when Scatterplot1 is brushed 
