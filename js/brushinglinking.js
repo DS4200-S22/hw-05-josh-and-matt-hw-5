@@ -30,15 +30,6 @@ let myCircles1;
 let myCircles2; 
 let bars;
 
-//TODO: append svg object to the body of the page to house Scatterplot2 (call it svg2): DONE
-
-//TODO: Initialize brush for Scatterplot2 and points. We will need these to be global. : DONE
-
-//TODO: append svg object to the body of the page to house bar chart : DONE
-
-//TODO: Initialize bars. We will need these to be global. : DONE
-
-
 // Define color scale
 const color = d3.scaleOrdinal()
                 .domain(["setosa", "versicolor", "virginica"])
@@ -112,10 +103,6 @@ d3.csv("data/iris.csv").then((data) => {
                               .style("fill", (d) => color(d.Species))
                               .style("opacity", 0.5);
 
-    //TODO: Define a brush (call it brush1): DONE
-
-    //TODO: Add brush1 to svg1: DONE
-
     brush1 = d3.brush()
 
     svg1
@@ -126,7 +113,6 @@ d3.csv("data/iris.csv").then((data) => {
 
   }
 
-  //TODO: Scatterplot 2 (show Sepal width on x-axis and Petal width on y-axis):DONE
   {
     xKey2 = "Sepal_Width";
     yKey2 = "Petal_Width";
@@ -185,20 +171,16 @@ d3.csv("data/iris.csv").then((data) => {
                               .style("fill", (d) => color(d.Species))
                               .style("opacity", 0.5);
 
-    //TODO: Define a brush (call it brush1): DONE
 
-    //TODO: Add brush1 to svg1: DONE
-
+    // creates and adds a brush for the second scatterplot.
     brush2 = d3.brush();
-
     svg2
-    .call( brush2                // Add the brush feature using the d3.brush function
-      .extent( [ [0,0], [width,height] ] ) // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
-      .on("start brush", updateChart2) // Each time the brush selection changes, trigger the 'updateChart' function
+    .call( brush2         
+      .extent( [ [0,0], [width,height] ] )
+      .on("start brush", updateChart2) 
     );
   }
 
-  //TODO: Barchart with counts of different species: DONE
   {
     // Hardcoded barchart data
     const data1 = [
@@ -248,53 +230,38 @@ d3.csv("data/iris.csv").then((data) => {
         .style("opacity", 0.5)
   }
 
-  //Brushing Code---------------------------------------------------------------------------------------------
-    
   // Call to removes existing brushes 
   function clear() {
       svg1.call(brush1.move, null);
       svg1.call(brush2.move, null);
-      
-
-      //TODO: add code to clear existing brush from svg2: DONE
   }
 
   // Call when Scatterplot1 is brushed 
   function updateChart1(brushEvent) {
-      //TODO: Find coordinates of brushed region: DONE
-  
-      //TODO: Give bold outline to all points within the brush region in Scatterplot1: DONE
-
-      //TODO: Give bold outline to all points in Scatterplot2 corresponding to points within the brush region in Scatterplot1: DONE
-
       const allIDs = new Set();
     
       extent = brushEvent['selection']
+
+      // selects and borders all nodes brushed in the first scatterplot.
       myCircles1.classed("selected", function(d){ const brushed = isBrushed(extent, x1(d[xKey1]), y1(d[yKey1]));
         if (brushed){
           allIDs.add(d.id);
         }
          return brushed});
 
+      // highlights all coorisponding nodes in the second scatterplot.
       myCircles2.classed("selected", function(d){ return allIDs.has(d.id) } )
   }
 
   // Call when Scatterplot2 is brushed 
   function updateChart2(brushEvent) {
-    
-    //TODO: Find coordinates of brushed region 
 
-    //TODO: Start an empty set that you can store names of selected species in : DONE
-  
-    //TODO: Give bold outline to all points within the brush region in Scatterplot2 & collected names of brushed species: DONE
-
-    //TODO: Give bold outline to all points in Scatterplot1 corresponding to points within the brush region in Scatterplot2: DONE
-
-    //TODO: Give bold outline to all bars in bar chart with corresponding to species selected by Scatterplot2 brush: DONE
     const allIDs = new Set();
     const selectedSpec = new Set();
 
     extent = brushEvent['selection']
+    
+    //  selects all the nodes in the second scatter plot, keeps track of their ID and selected species.
     myCircles2.classed("selected", function(d){ const brushed = isBrushed(extent, x2(d[xKey2]), y2(d[yKey2]));
       if (brushed){
         allIDs.add(d.id);
@@ -302,9 +269,11 @@ d3.csv("data/iris.csv").then((data) => {
       }
        return brushed});
 
-    console.log(selectedSpec)
 
+    // highlights all coorisponding nodes in scatter plot 1.
     myCircles1.classed("selected", function(d){ return allIDs.has(d.id) } )
+
+    // highlights the corrisponding species represented in the bar chart.
     bars.classed("selected", function(d){ console.log(d.Species); return selectedSpec.has(d.Species) } )
   }
 
