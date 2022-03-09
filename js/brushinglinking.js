@@ -27,7 +27,7 @@ const svg3 = d3.select("#vis-holder")
 let brush1; 
 let myCircles1; 
 
-//TODO: append svg object to the body of the page to house Scatterplot2 (call it svg2)
+//TODO: append svg object to the body of the page to house Scatterplot2 (call it svg2):
 
 //TODO: Initialize brush for Scatterplot2 and points. We will need these to be global.
 
@@ -112,10 +112,9 @@ d3.csv("data/iris.csv").then((data) => {
     //TODO: Define a brush (call it brush1)
 
     //TODO: Add brush1 to svg1
-    
   }
 
-  //TODO: Scatterplot 2 (show Sepal width on x-axis and Petal width on y-axis)
+  //TODO: Scatterplot 2 (show Sepal width on x-axis and Petal width on y-axis):DONE
   {
     xKey2 = "Sepal_Width";
     yKey2 = "Petal_Width";
@@ -247,7 +246,6 @@ d3.csv("data/iris.csv").then((data) => {
       //TODO: Give bold outline to all points within the brush region in Scatterplot1
 
       //TODO: Give bold outline to all points in Scatterplot2 corresponding to points within the brush region in Scatterplot1
-    
   }
 
   // Call when Scatterplot2 is brushed 
