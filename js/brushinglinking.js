@@ -98,7 +98,7 @@ d3.csv("data/iris.csv").then((data) => {
       );
 
     // Add points
-    const myCircles1 = svg1.selectAll("circle")
+    myCircles1 = svg1.selectAll("circle")
                             .data(data)
                             .enter()
                               .append("circle")
@@ -112,6 +112,15 @@ d3.csv("data/iris.csv").then((data) => {
     //TODO: Define a brush (call it brush1)
 
     //TODO: Add brush1 to svg1
+
+    brush1 = d3.brush()
+
+    svg1
+    .call( brush1                // Add the brush feature using the d3.brush function
+      .extent( [ [0,0], [width,height] ] ) // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
+      .on("start brush", updateChart1) // Each time the brush selection changes, trigger the 'updateChart' function
+    )
+
   }
 
   //TODO: Scatterplot 2 (show Sepal width on x-axis and Petal width on y-axis):DONE
@@ -162,7 +171,7 @@ d3.csv("data/iris.csv").then((data) => {
       );
 
     // Add points
-    const myCircles2 = svg2.selectAll("circle")
+    myCircles2 = svg2.selectAll("circle")
                             .data(data)
                             .enter()
                               .append("circle")
@@ -176,7 +185,14 @@ d3.csv("data/iris.csv").then((data) => {
     //TODO: Define a brush (call it brush1)
 
     //TODO: Add brush1 to svg1
-    
+
+    brush2 = d3.brush();
+
+    svg2
+    .call( brush2                // Add the brush feature using the d3.brush function
+      .extent( [ [0,0], [width,height] ] ) // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
+      .on("start brush", updateChart2) // Each time the brush selection changes, trigger the 'updateChart' function
+    );
   }
 
   //TODO: Barchart with counts of different species
@@ -246,6 +262,11 @@ d3.csv("data/iris.csv").then((data) => {
       //TODO: Give bold outline to all points within the brush region in Scatterplot1
 
       //TODO: Give bold outline to all points in Scatterplot2 corresponding to points within the brush region in Scatterplot1
+
+      console.log()
+      extent = brushEvent['selection']
+      myCircles1.classed("selected", function(d){ return isBrushed(extent, x1(d[xKey1]), y1(d[yKey1]) ) } )
+      myCircles2.classed("selected", function(d){ return isBrushed(extent, x2(d[xKey2]), y2(d[yKey2]) ) } )
   }
 
   // Call when Scatterplot2 is brushed 
@@ -260,7 +281,6 @@ d3.csv("data/iris.csv").then((data) => {
     //TODO: Give bold outline to all points in Scatterplot1 corresponding to points within the brush region in Scatterplot2
 
     //TODO: Give bold outline to all bars in bar chart with corresponding to species selected by Scatterplot2 brush
-
   }
 
     //Finds dots within the brushed region
@@ -273,4 +293,6 @@ d3.csv("data/iris.csv").then((data) => {
         y1 = brush_coords[1][1];
       return x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1; // This return TRUE or FALSE depending on if the points is in the selected area
     }
+
+  
 });

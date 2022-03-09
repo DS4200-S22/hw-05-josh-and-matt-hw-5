@@ -15,9 +15,8 @@ body {
   row-gap: 15px;
   padding: 15px;
 }
-
 .selected {
   opacity: 1 !important;
-  stroke: blac;
-  stroke-width: 1px;
+  stroke-width: 10px;
+  stroke: black;
 }
