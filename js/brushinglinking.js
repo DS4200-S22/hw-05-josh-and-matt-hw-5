@@ -25,15 +25,18 @@ const svg3 = d3.select("#vis-holder")
 
 // Initialize brush for Scatterplot1 and points. We will need these to be global. 
 let brush1; 
-let myCircles1; 
+let brush2; 
+let myCircles1;
+let myCircles2; 
+let bars;
 
-//TODO: append svg object to the body of the page to house Scatterplot2 (call it svg2):
+//TODO: append svg object to the body of the page to house Scatterplot2 (call it svg2): DONE
 
-//TODO: Initialize brush for Scatterplot2 and points. We will need these to be global.
+//TODO: Initialize brush for Scatterplot2 and points. We will need these to be global. : DONE
 
-//TODO: append svg object to the body of the page to house bar chart 
+//TODO: append svg object to the body of the page to house bar chart : DONE
 
-//TODO: Initialize bars. We will need these to be global. 
+//TODO: Initialize bars. We will need these to be global. : DONE
 
 
 // Define color scale
@@ -109,16 +112,16 @@ d3.csv("data/iris.csv").then((data) => {
                               .style("fill", (d) => color(d.Species))
                               .style("opacity", 0.5);
 
-    //TODO: Define a brush (call it brush1)
+    //TODO: Define a brush (call it brush1): DONE
 
-    //TODO: Add brush1 to svg1
+    //TODO: Add brush1 to svg1: DONE
 
     brush1 = d3.brush()
 
     svg1
-    .call( brush1                // Add the brush feature using the d3.brush function
-      .extent( [ [0,0], [width,height] ] ) // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
-      .on("start brush", updateChart1) // Each time the brush selection changes, trigger the 'updateChart' function
+    .call( brush1                
+      .extent( [ [0,0], [width,height] ] ) 
+      .on("start brush", updateChart1)
     )
 
   }
@@ -182,9 +185,9 @@ d3.csv("data/iris.csv").then((data) => {
                               .style("fill", (d) => color(d.Species))
                               .style("opacity", 0.5);
 
-    //TODO: Define a brush (call it brush1)
+    //TODO: Define a brush (call it brush1): DONE
 
-    //TODO: Add brush1 to svg1
+    //TODO: Add brush1 to svg1: DONE
 
     brush2 = d3.brush();
 
@@ -195,13 +198,13 @@ d3.csv("data/iris.csv").then((data) => {
     );
   }
 
-  //TODO: Barchart with counts of different species
+  //TODO: Barchart with counts of different species: DONE
   {
     // Hardcoded barchart data
     const data1 = [
-      {name: 'setosa', occurance: 50},
-      {name: 'versicolor', occurance: 50},
-      {name: 'virginica', occurance: 50}
+      {Species: 'setosa', occurance: 50},
+      {Species: 'versicolor', occurance: 50},
+      {Species: 'virginica', occurance: 50}
     ];
 
     // Find max y value to plot  
@@ -228,21 +231,21 @@ d3.csv("data/iris.csv").then((data) => {
     svg3.append("g")
         .attr("transform", `translate(0,${height - margin.bottom})`) 
         .call(d3.axisBottom(xScale1) 
-                .tickFormat(i => data1[i].name))  
+                .tickFormat(i => data1[i].Species))  
         .attr("font-size", '20px'); 
 
     // Add bars to the webpage, bind events needed for tooltips 
-    svg3.selectAll(".bar") 
+    bars = svg3.selectAll(".bar") 
       .data(data1) 
       .enter()  
       .append("rect") 
-        .attr("class", "bar") 
-        .attr("x", (d,i) => xScale1(i)) 
-        .attr("y", (d) => yScale1(d.occurance)) 
-        .attr("height", (d) => (height - margin.bottom) - yScale1(d.occurance)) 
+        .attr("id", (data1) => data1.Species)
+        .attr("x", (data1,i) => xScale1(i)) 
+        .attr("y", (data1) => yScale1(data1.occurance)) 
+        .attr("height", (data1) => (height - margin.bottom) - yScale1(data1.occurance)) 
         .attr("width", xScale1.bandwidth()) 
-        .style("fill", (d) => color(d.name))
-        .style("opacity", 0.5);
+        .style("fill", (data1) => color(data1.Species))
+        .style("opacity", 0.5)
   }
 
   //Brushing Code---------------------------------------------------------------------------------------------
@@ -256,17 +259,22 @@ d3.csv("data/iris.csv").then((data) => {
 
   // Call when Scatterplot1 is brushed 
   function updateChart1(brushEvent) {
-      
-      //TODO: Find coordinates of brushed region 
+      //TODO: Find coordinates of brushed region: DONE
   
-      //TODO: Give bold outline to all points within the brush region in Scatterplot1
+      //TODO: Give bold outline to all points within the brush region in Scatterplot1: DONE
 
-      //TODO: Give bold outline to all points in Scatterplot2 corresponding to points within the brush region in Scatterplot1
+      //TODO: Give bold outline to all points in Scatterplot2 corresponding to points within the brush region in Scatterplot1: DONE
 
-      console.log()
+      const allIDs = new Set();
+    
       extent = brushEvent['selection']
-      myCircles1.classed("selected", function(d){ return isBrushed(extent, x1(d[xKey1]), y1(d[yKey1]) ) } )
-      myCircles2.classed("selected", function(d){ return isBrushed(extent, x2(d[xKey2]), y2(d[yKey2]) ) } )
+      myCircles1.classed("selected", function(d){ const brushed = isBrushed(extent, x1(d[xKey1]), y1(d[yKey1]));
+        if (brushed){
+          allIDs.add(d.id);
+        }
+         return brushed});
+
+      myCircles2.classed("selected", function(d){ return allIDs.has(d.id) } )
   }
 
   // Call when Scatterplot2 is brushed 
@@ -274,13 +282,28 @@ d3.csv("data/iris.csv").then((data) => {
     
     //TODO: Find coordinates of brushed region 
 
-    //TODO: Start an empty set that you can store names of selected species in 
+    //TODO: Start an empty set that you can store names of selected species in : DONE
   
-    //TODO: Give bold outline to all points within the brush region in Scatterplot2 & collected names of brushed species
+    //TODO: Give bold outline to all points within the brush region in Scatterplot2 & collected names of brushed species: DONE
 
-    //TODO: Give bold outline to all points in Scatterplot1 corresponding to points within the brush region in Scatterplot2
+    //TODO: Give bold outline to all points in Scatterplot1 corresponding to points within the brush region in Scatterplot2: DONE
 
-    //TODO: Give bold outline to all bars in bar chart with corresponding to species selected by Scatterplot2 brush
+    //TODO: Give bold outline to all bars in bar chart with corresponding to species selected by Scatterplot2 brush: DONE
+    const allIDs = new Set();
+    const selectedSpec = new Set();
+
+    extent = brushEvent['selection']
+    myCircles2.classed("selected", function(d){ const brushed = isBrushed(extent, x2(d[xKey2]), y2(d[yKey2]));
+      if (brushed){
+        allIDs.add(d.id);
+       selectedSpec.add(d.Species)
+      }
+       return brushed});
+
+    console.log(selectedSpec)
+
+    myCircles1.classed("selected", function(d){ return allIDs.has(d.id) } )
+    bars.classed("selected", function(d){ console.log(d.Species); return selectedSpec.has(d.Species) } )
   }
 
     //Finds dots within the brushed region
@@ -293,6 +316,4 @@ d3.csv("data/iris.csv").then((data) => {
         y1 = brush_coords[1][1];
       return x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1; // This return TRUE or FALSE depending on if the points is in the selected area
     }
-
-  
 });
