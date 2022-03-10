@@ -216,6 +216,14 @@ d3.csv("data/iris.csv").then((data) => {
                 .tickFormat(i => data1[i].Species))  
         .attr("font-size", '20px'); 
 
+    svg3.append("text")
+        .attr("class", "y label")
+        .attr("text-anchor", "end")
+        .attr("y", 6)
+        .attr("dy", ".75em")
+        .attr("transform", "rotate(-90)")
+        .text("count");
+
     // Add bars to the webpage, bind events needed for tooltips 
     bars = svg3.selectAll(".bar") 
       .data(data1) 
