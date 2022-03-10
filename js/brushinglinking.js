@@ -214,15 +214,7 @@ d3.csv("data/iris.csv").then((data) => {
         .attr("transform", `translate(0,${height - margin.bottom})`) 
         .call(d3.axisBottom(xScale1) 
                 .tickFormat(i => data1[i].Species))  
-        .attr("font-size", '20px'); 
-
-    svg.append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("y", 0 - margin.left)
-        .attr("x",0 - (height / 2))
-        .attr("dy", "1em")
-        .style("text-anchor", "middle")
-        .text("Count");      
+        .attr("font-size", '20px');  
   
 
     // Add bars to the webpage, bind events needed for tooltips 
